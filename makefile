@@ -14,22 +14,26 @@ run_phpunit_tests: run_phpunit_test_php55 run_phpunit_test_php56 run_phpunit_tes
 run_phpunit_test_php55:
 	rm -rf reports/php55
 	mkdir -p reports/php55
-	docker-compose run --rm phpunit-php55
+	docker-compose run --rm phpunit-php55 \
+		--coverage-clover=/app/reports/php55/coverage/coverage.xml \
+		--coverage-html=/app/reports/php55/coverage/html \
+		--log-junit=/app/reports/php55/junit.xml
 
 run_phpunit_test_php56:
 	rm -rf reports/php56
 	mkdir -p reports/php56
-	docker-compose run --rm phpunit-php56
+	docker-compose run --rm phpunit-php56 \
+		--coverage-clover=/app/reports/php56/coverage/coverage.xml \
+		--coverage-html=/app/reports/php56/coverage/html \
+		--log-junit=/app/reports/php56/junit.xml
 
 run_phpunit_test_php70:
 	rm -rf reports/php70
 	mkdir -p reports/php70
-	docker-compose run --rm phpunit-php70
-
-run_phpunit_test_travis:
-	rm -rf reports
-	mkdir -p reports
-	docker-compose run --rm phpunit-travis
+	docker-compose run --rm phpunit-php70 \
+		--coverage-clover=/app/reports/php70/coverage/coverage.xml \
+		--coverage-html=/app/reports/php70/coverage/html \
+		--log-junit=/app/reports/php70/junit.xml
 
 run_stylecheck:
 	rm -rf reports/style
