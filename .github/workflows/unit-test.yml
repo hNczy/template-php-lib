@@ -1,0 +1,47 @@
+name: Run unit tests
+
+on:
+  workflow_call:
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php-versions: ['5.5', '5.6', '7.0']
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          coverage: xdebug
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --no-progress --no-suggest --prefer-dist
+
+      - name: Run PHPUnit
+        run: vendor/bin/phpunit --configuration phpunit.xml
+
+      - name: Fix paths in PHPUnit coverage report
+        run: |
+          sed -i 's|/app/||g' reports/php/junit.xml
+          sed -i "s|${GITHUB_WORKSPACE}/||g" reports/php/junit.xml
+        if: always()
+
+      - name: Publish Test Report
+        uses: mikepenz/action-junit-report@v4
+        if: always()
+        with:
+          report_paths: '**/reports/php/junit.xml'
+          detailed_summary: true
+          annotate_only: true

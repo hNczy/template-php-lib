@@ -1,0 +1,38 @@
+name: Run Stylecheck
+
+on:
+  workflow_call:
+
+jobs:
+  stylecheck:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: latest
+          extensions: tokenizer, xmlwriter, SimpleXML
+          ini-values: max_execution_time=0, memory_limit=-1
+          coverage: none
+          tools: cs2pr, phpcs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure PHP CodeSniffer - set default standard to PSR12
+        run: phpcs --config-set default_standard PSR12
+
+      - name: Run Stylecheck with PHP CodeSniffer
+        run: |
+          git diff --name-only --diff-filter=d origin/main...HEAD > filelist.txt
+          ls -al filelist.txt
+          phpcs \
+              -q \
+              --file-list=filelist.txt \
+              --extensions=php \
+              --report=checkstyle | cs2pr

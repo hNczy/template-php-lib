@@ -1,0 +1,28 @@
+name: Run tests on PR
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  php-lint:
+    uses: ./.github/workflows/php-lint.yml
+  stylecheck:
+#    needs:
+#      - php-lint
+    uses: ./.github/workflows/stylecheck.yml
+  php-compatibility:
+#    needs:
+#      - php-lint
+#      - stylecheck
+    uses: ./.github/workflows/php-compatibility.yml
+
+  unit-tests:
+    permissions:
+      checks: write # for publishing test report
+#    needs:
+#      - php-lint
+#      - stylecheck
+#      - php-compatibility
+    uses: ./.github/workflows/unit-test.yml
