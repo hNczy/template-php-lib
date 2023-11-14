@@ -11,9 +11,6 @@
     </testsuites>
     <logging>
         <log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>
-        <log type="coverage-clover" target="reports/coverage/coverage.xml"/>
-        <log type="coverage-html" target="reports/coverage/html"/>
-        <log type="junit" target="reports/junit.xml"/>
     </logging>
     <filter>
         <whitelist>
