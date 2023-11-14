@@ -1,17 +1,5 @@
 version: "3.6"
 services:
-  phpunit-travis:
-    build:
-      context: .
-      args:
-        - COMPOSER_AUTH
-        - PHP_VERSION
-    user: $DOCKER_USER
-    volumes:
-      - .:/app
-      - /app/vendor
-      - ./reports:/app/reports
-
   phpunit-php55:
     build:
       context: .
