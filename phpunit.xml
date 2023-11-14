@@ -11,6 +11,7 @@
     </testsuites>
     <logging>
         <log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>
+        <log type="junit" target="reports/php/junit.xml"/>
     </logging>
     <filter>
         <whitelist>

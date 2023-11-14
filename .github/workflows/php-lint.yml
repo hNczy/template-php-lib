@@ -1,0 +1,40 @@
+name: Run PHP lint
+
+on:
+  workflow_call:
+
+jobs:
+  php-lint:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php-versions: [ '5.5', '5.6', '7.0' ]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          coverage: none
+          tools: cs2pr, parallel-lint
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run PHP lint check on changed files
+        run: |
+          git diff --name-only --diff-filter=d origin/main...HEAD \
+          | grep '\.php$' \
+          | parallel-lint \
+              --stdin \
+              --no-progress \
+              --exclude vendor \
+              --exclude reports \
+              --checkstyle \
+          | cs2pr
