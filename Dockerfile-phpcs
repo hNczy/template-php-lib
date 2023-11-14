@@ -1,0 +1,6 @@
+FROM php:cli-alpine
+
+RUN curl -L https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar -o /usr/local/bin/phpcs \
+    && chmod +x /usr/local/bin/phpcs
+
+ENTRYPOINT ["phpcs"]
