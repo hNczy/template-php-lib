@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-versions: ['7.1', '7.2', '7.3', '7.4', '8.0']
+        php-versions: ['5.5-']
 
     steps:
       - name: Checkout code
