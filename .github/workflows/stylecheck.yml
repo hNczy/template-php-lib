@@ -13,7 +13,17 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Guard against no PHP changes
+        id: guard
+        run: |
+          if [[ -z $(git diff --name-only --diff-filter=d origin/main...HEAD | grep '\.php$') ]]; then
+            echo "HAS_CHANGES=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "HAS_CHANGES=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Setup PHP
+        if: ${{ steps.guard.outputs.HAS_CHANGES == 'true' }}
         uses: shivammathur/setup-php@v2
         with:
           php-version: latest
@@ -25,9 +35,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configure PHP CodeSniffer - set default standard to PSR12
+        if: ${{ steps.guard.outputs.HAS_CHANGES == 'true' }}
         run: phpcs --config-set default_standard PSR12
 
       - name: Run Stylecheck with PHP CodeSniffer
+        if: ${{ steps.guard.outputs.HAS_CHANGES == 'true' }}
         run: |
           git diff --name-only --diff-filter=d origin/main...HEAD > filelist.txt
           ls -al filelist.txt
