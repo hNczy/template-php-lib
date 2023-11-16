@@ -29,12 +29,12 @@ jobs:
 
       - name: Run PHP lint check on changed files
         run: |
-          git diff --name-only --diff-filter=d origin/main...HEAD \
-          | grep '\.php$' \
-          | parallel-lint \
+          git diff --name-only --diff-filter=d origin/main...HEAD | \
+            grep '\.php$' | \
+            parallel-lint \
               --stdin \
               --no-progress \
               --exclude vendor \
               --exclude reports \
-              --checkstyle \
-          | cs2pr
+              --checkstyle | \
+            cs2pr
