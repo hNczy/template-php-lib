@@ -8,21 +8,23 @@ on:
 jobs:
   php-lint:
     uses: ./.github/workflows/php-lint.yml
+
   stylecheck:
-#    needs:
-#      - php-lint
+    needs:
+      - php-lint
     uses: ./.github/workflows/stylecheck.yml
+
   php-compatibility:
-#    needs:
-#      - php-lint
-#      - stylecheck
+    needs:
+      - php-lint
+      - stylecheck
     uses: ./.github/workflows/php-compatibility.yml
 
   unit-tests:
     permissions:
-      checks: write # for publishing test report
-#    needs:
-#      - php-lint
-#      - stylecheck
-#      - php-compatibility
+      checks: write # for publishing test report (mikepenz/action-junit-report@v4)
+    needs:
+      - php-lint
+      - stylecheck
+      - php-compatibility
     uses: ./.github/workflows/unit-test.yml
