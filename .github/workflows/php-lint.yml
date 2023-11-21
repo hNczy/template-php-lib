@@ -51,5 +51,4 @@ jobs:
               --exclude reports \
               --show-deprecated \
               --checkstyle | \
-            cs2pr \
-          || echo "### No changed PHP files" >> $GITHUB_STEP_SUMMARY
+            cs2pr
