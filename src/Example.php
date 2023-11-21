@@ -4,7 +4,7 @@ namespace TemplatePhpLib;
 
 class Example
 {
-    public function examplePrint($str)
+    public function examplePrint$str)
     {
         print $str;
     }
